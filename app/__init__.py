@@ -19,7 +19,9 @@ def create_app(config_class='config.Config'):
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    from app.ressources import auth
+    from app.ressources import auth, mission, expense
     app.register_blueprint(auth.bp)
+    app.register_blueprint(mission.bp)
+    app.register_blueprint(expense.bp)
 
     return app
