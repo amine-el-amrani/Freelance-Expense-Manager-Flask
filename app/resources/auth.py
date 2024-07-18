@@ -21,7 +21,9 @@ def register():
         password_hash=generate_password_hash(data['password']))
     db.session.add(user)
     db.session.commit()
-    return user_schema.jsonify(user), 201
+
+    result = user_schema.dump(user)
+    return jsonify(result), 201
 
 @bp.route('/login', methods=['POST'])
 def login():
