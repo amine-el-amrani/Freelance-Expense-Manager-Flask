@@ -23,3 +23,21 @@ class User(db.Model):
 
     def get_token(self, expires_in=3600):
         return create_access_token(identity=self.id, expires_delta=timedelta(seconds=expires_in))
+    
+class Mission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='missions')
+
+class Expense(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Float, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    date = db.Column(db.Date, nullable=False)
+    mission_id = db.Column(db.Integer, db.ForeignKey('mission.id'), nullable=False)
+    mission = db.relationship('Mission', back_populates='expenses')
+    
+User.missions = db.relationship('Mission', order_by=Mission.id ,back_populates='user')
+Mission.expenses = db.relationship('Expense', order_by=Expense.id, back_populates='mission')
