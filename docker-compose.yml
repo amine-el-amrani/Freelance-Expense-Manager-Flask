@@ -4,9 +4,9 @@ service:
   db:
     image: postgres:13
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: freelance_expense_manager
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -19,6 +19,8 @@ service:
       - "5000:5000"
     depends_on:
       - db
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
