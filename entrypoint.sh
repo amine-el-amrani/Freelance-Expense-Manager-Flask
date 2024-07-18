@@ -7,7 +7,7 @@ done
 echo "PostgreSQL started"
 
 flask db init || true
-flask db migrate -m "Initial migration." || true
+flask db migrate || true
 flask db upgrade
 
 exec "$@"
