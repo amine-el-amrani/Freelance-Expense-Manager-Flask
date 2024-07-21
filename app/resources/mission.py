@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import db, Mission
 from app.schemas import mission_schema, missions_schema
 
@@ -12,18 +12,21 @@ def create_mission():
     errors = mission_schema.validate(data)
     if errors:
         return jsonify(errors), 400
+    current_user_id = get_jwt_identity()
     mission = Mission(
         name=data['name'], 
         description=data.get('description'), 
-        user_id=data['user_id']
+        user_id=current_user_id
     )
     db.session.add(mission)
     db.session.commit()
 
-    return mission_schema.jsonify(mission), 201
+    result = mission_schema.dump(mission)
+    return jsonify(result), 201
 
 @bp.route('/', methods=['GET'])
 @jwt_required()
 def get_missions():
     missions = Mission.query.all()
-    return missions_schema.jsonify(missions), 200
+    result = missions_schema.dump(missions)
+    return jsonify(result), 200
