@@ -23,7 +23,7 @@ class ExpenseSchema(Schema):
     amount = fields.Float(required=True)
     description = fields.Str()
     date = fields.Date(required=True)
-    mission_id = fields.Int(dump_only=True)
+    mission_id = fields.Int(required=True)
 
 expense_schema = ExpenseSchema()
 expenses_schema = ExpenseSchema(many=True)
